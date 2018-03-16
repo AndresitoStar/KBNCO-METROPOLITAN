@@ -21,6 +21,13 @@ import android.widget.Toast;
 import cu.tko.kbnco_metro.fragments.HistorialFrg;
 import cu.tko.kbnco_metro.fragments.Home;
 
+import static android.Manifest.permission.CALL_PHONE;
+import static android.Manifest.permission.GET_ACCOUNTS;
+import static android.Manifest.permission.READ_SMS;
+import static android.Manifest.permission.RECEIVE_SMS;
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.SEND_SMS;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ActivityCompat.OnRequestPermissionsResultCallback,
@@ -32,9 +39,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        chequearPermisos(Manifest.permission.READ_SMS);
-        chequearPermisos(Manifest.permission.RECEIVE_SMS);
-        chequearPermisos(Manifest.permission.CALL_PHONE);
+//        chequearPermisos(READ_SMS);
+//        chequearPermisos(RECEIVE_SMS);
+//        chequearPermisos(CALL_PHONE);
+        RequestMultiplePermission();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -144,30 +152,70 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private void chequearPermisos(String requestedPermision) {
-        // Should we show an explanation?
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, requestedPermision)) {
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{requestedPermision}, REQUEST_CODE_ASK_PERMISSIONS);
-        }
-    }
+//    @TargetApi(Build.VERSION_CODES.M)
+//    private void chequearPermisos(String requestedPermision) {
+//        // Should we show an explanation?
+//        if (ActivityCompat.shouldShowRequestPermissionRationale(this, requestedPermision)) {
+//        } else {
+//            ActivityCompat.requestPermissions(this, new String[]{requestedPermision}, REQUEST_CODE_ASK_PERMISSIONS);
+//        }
+//    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (REQUEST_CODE_ASK_PERMISSIONS == requestCode) {
-            if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //conPermisos = true;
-            } else {
-                //conPermisos = false;
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        if (REQUEST_CODE_ASK_PERMISSIONS == requestCode) {
+//            if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                //conPermisos = true;
+//            } else {
+//                //conPermisos = false;
+//            }
+//        } else {
+//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        }
+//    }
 
     @Override
     public void goHistorialFromHome() {
         goHistorial();
+    }
+
+
+    private void RequestMultiplePermission() {
+
+        // Creating String Array with Permissions.
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]
+                {
+                        RECEIVE_SMS,
+                        READ_SMS,
+                        CALL_PHONE
+                }, REQUEST_CODE_ASK_PERMISSIONS);
+
+    }
+
+    // Calling override method.
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+
+            case REQUEST_CODE_ASK_PERMISSIONS:
+
+                if (grantResults.length > 0) {
+
+                    boolean CameraPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean RecordAudioPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean SendSMSPermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+
+                    if (CameraPermission && RecordAudioPermission && SendSMSPermission) {
+
+                        Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this,"Permission Denied",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                break;
+        }
     }
 }
