@@ -12,5 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:listSelector="@android:drawable/list_selector_background"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         tools:listitem="@layout/historial_item" />
 </RelativeLayout>

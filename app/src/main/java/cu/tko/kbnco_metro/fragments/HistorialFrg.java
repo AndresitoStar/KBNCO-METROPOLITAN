@@ -99,7 +99,6 @@ public class HistorialFrg extends Fragment {
         if (cursor != null) {
             cursor.moveToLast();
             if (cursor.getCount() > 0) {
-
                 do {
                     String address = cursor.getString(cursor.getColumnIndex("address"));
                     if (address != null && address.equalsIgnoreCase("pagoxmovil")) {
