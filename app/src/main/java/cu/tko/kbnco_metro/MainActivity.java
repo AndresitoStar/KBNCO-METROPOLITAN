@@ -205,14 +205,14 @@ public class MainActivity extends AppCompatActivity
                     boolean RecordAudioPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                     boolean SendSMSPermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                    if (CameraPermission && RecordAudioPermission && SendSMSPermission) {
-
-                        Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this,"Permission Denied",Toast.LENGTH_SHORT).show();
-
-                    }
+//                    if (CameraPermission && RecordAudioPermission && SendSMSPermission) {
+//
+//                        Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+//                    }
+//                    else {
+//                        Toast.makeText(MainActivity.this,"Permission Denied",Toast.LENGTH_SHORT).show();
+//
+//                    }
                 }
 
                 break;
