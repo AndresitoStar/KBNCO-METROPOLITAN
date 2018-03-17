@@ -19,11 +19,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import cu.tko.kbnco_metro.R;
+import cu.tko.kbnco_metro.logica.Sms;
+import cu.tko.kbnco_metro.logica.TIPO_MONEDA;
 import cu.tko.kbnco_metro.logica.TIPO_OPERACIONES;
+import cu.tko.kbnco_metro.logica.TIPO_SERVICIO;
+import cu.tko.kbnco_metro.logica.TIPO_TRANSACCION;
+import cu.tko.kbnco_metro.logica.Transaccion;
 
 
 /**
@@ -34,9 +40,11 @@ import cu.tko.kbnco_metro.logica.TIPO_OPERACIONES;
 public class HistorialFrg extends Fragment {
     private ListView historialListView;
     private HistorialAdapter adapter;
+    private List<Transaccion> transacciones;
 
     public HistorialFrg() {
         // Required empty public constructor
+        transacciones = new ArrayList<>();
     }
 
     /**
@@ -82,12 +90,6 @@ public class HistorialFrg extends Fragment {
         return view;
     }
 
-    private class Sms {
-        public String messageNumber;
-        public String messageContent;
-        public String fecha;
-    }
-
     public List<Sms> readSms() {
         ArrayList<Sms> smsInbox = new ArrayList<Sms>();
 
@@ -116,15 +118,72 @@ public class HistorialFrg extends Fragment {
                         Sms message = new Sms();
                         message.messageContent = cursor.getString(cursor.getColumnIndex("body"));
                         message.fecha = formatter.format(calendar.getTime());
+                        message.fecha_date = calendar.getTime();
+
+                        PoblarTramsacciones(message);
+
                         smsInbox.add(message);
                     }
                 } while (cursor.moveToPrevious());
             }
             cursor.close();
         }
-
         return smsInbox;
+    }
 
+    private void PoblarTramsacciones(Sms message) {
+        Transaccion transaccion = new Transaccion();
+
+        //Decodificando los mensajes de Tipo Ultimas Operaciones
+        if (TIPO_OPERACIONES.identificar(message.messageContent.trim()) == TIPO_OPERACIONES.ULTIMAS_OPERACIONES){
+            String[] lines = message.messageContent.split("\n");
+
+            for (int i = 2; i< lines.length;i++) {
+                transaccion = new Transaccion();
+                String[] items = lines[i].split(";");
+                String[] date = items[0].trim().split("/");
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Integer.parseInt(date[2]),Integer.parseInt(date[1]),Integer.parseInt(date[0]));
+                transaccion.fecha=calendar.getTime();
+                transaccion.servicio = TIPO_SERVICIO.Identificar(items[1].trim());
+                transaccion.operacion = TIPO_TRANSACCION.Identificar(items[2].trim());
+                transaccion.monto = Double.parseDouble(items[3].trim());
+                transaccion.moneda = TIPO_MONEDA.Identificar(items[4].trim());
+                transaccion.noTransaccion = (items[5].trim()).split(" ")[0].trim();
+
+                if (!transacciones.contains(transaccion))
+                    transacciones.add(transaccion);
+            }
+        }
+        //Decodificando Factura Pagada
+        if (TIPO_OPERACIONES.identificar(message.messageContent.trim()) == TIPO_OPERACIONES.FACTURA_PAGADA){
+            String[] lines = message.messageContent.split("\n");
+
+            transaccion = new Transaccion();
+            transaccion.fecha = message.fecha_date;
+            transaccion.servicio = TIPO_SERVICIO.Identificar(lines[0]);
+            transaccion.operacion = TIPO_TRANSACCION.Identificar(lines[4]);
+            transaccion.monto = Double.parseDouble(lines[2].trim().split(" ")[2].trim());
+            transaccion.moneda = TIPO_MONEDA.Identificar(lines[2].trim().split(" ")[3].trim());
+            transaccion.noTransaccion = lines[3].trim().split(" ")[2].trim();
+            if (!transacciones.contains(transaccion))
+                transacciones.add(transaccion);
+
+        }
+        //Decodificando Transferencia de Saldo
+        if (TIPO_OPERACIONES.identificar(message.messageContent.trim()) == TIPO_OPERACIONES.TRANSFERENCIA_RX_SALDO){
+            String[] lines = message.messageContent.split("\n");
+
+            transaccion = new Transaccion();
+            transaccion.fecha = message.fecha_date;
+            transaccion.servicio = TIPO_SERVICIO.Identificar(lines[0]);
+            transaccion.operacion = TIPO_TRANSACCION.CREDITO;
+            transaccion.monto = Double.parseDouble(lines[0].trim().split(" ")[10].trim());
+            transaccion.moneda = TIPO_MONEDA.Identificar(lines[0].trim().split(" ")[11].trim());
+            transaccion.noTransaccion = lines[0].trim().split(" ")[14].trim();
+            if (!transacciones.contains(transaccion))
+                transacciones.add(transaccion);
+        }
     }
 
     /**
