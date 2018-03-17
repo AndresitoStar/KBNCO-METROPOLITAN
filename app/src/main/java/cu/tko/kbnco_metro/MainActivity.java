@@ -1,9 +1,6 @@
 package cu.tko.kbnco_metro;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -20,13 +17,11 @@ import android.widget.Toast;
 
 import cu.tko.kbnco_metro.fragments.HistorialFrg;
 import cu.tko.kbnco_metro.fragments.Home;
+import cu.tko.kbnco_metro.fragments.TransacFrg;
 
 import static android.Manifest.permission.CALL_PHONE;
-import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_SMS;
 import static android.Manifest.permission.RECEIVE_SMS;
-import static android.Manifest.permission.RECORD_AUDIO;
-import static android.Manifest.permission.SEND_SMS;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -126,12 +121,22 @@ public class MainActivity extends AppCompatActivity
                 goHistorial();
             } else if (id == R.id.menu_home) {
                 goHome();
+            } else if (id == R.id.menu_transacciones){
+                goTransac();
             }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void goTransac() {
+        isHome = false;
+        setTitle(R.string.transacciones);
+        FragmentManager mFragmentManager = getSupportFragmentManager();
+        Fragment mFragment = new TransacFrg();
+        mFragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
     }
 
     private void goHistorial() {
@@ -178,7 +183,6 @@ public class MainActivity extends AppCompatActivity
     public void goHistorialFromHome() {
         goHistorial();
     }
-
 
     private void RequestMultiplePermission() {
 
