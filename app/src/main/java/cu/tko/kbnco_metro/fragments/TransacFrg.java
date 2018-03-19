@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +31,8 @@ import cu.tko.kbnco_metro.logica.TIPO_OPERACIONES;
 import cu.tko.kbnco_metro.logica.TIPO_SERVICIO;
 import cu.tko.kbnco_metro.logica.TIPO_TRANSACCION;
 import cu.tko.kbnco_metro.logica.Transaccion;
+
+import static java.lang.Long.*;
 
 
 /**
@@ -105,7 +108,7 @@ public class TransacFrg extends Fragment {
                     String address = cursor.getString(cursor.getColumnIndex("address"));
                     if (address != null && address.equalsIgnoreCase("pagoxmovil")) {
                         String date = cursor.getString(cursor.getColumnIndex("date"));
-                        Long timestamp = Long.parseLong(date);
+                        Long timestamp = parseLong(date);
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(timestamp);
                         DateFormat formatter = null;
@@ -120,7 +123,7 @@ public class TransacFrg extends Fragment {
                         message.fecha = formatter.format(calendar.getTime());
                         message.fecha_date = calendar.getTime();
 
-                        PoblarTramsacciones(message);
+                        PoblarTransacciones(message);
 
                         smsInbox.add(message);
                     }
@@ -131,7 +134,7 @@ public class TransacFrg extends Fragment {
         return smsInbox;
     }
 
-    private void PoblarTramsacciones(Sms message) {
+    private void PoblarTransacciones(Sms message) {
         Transaccion transaccion = new Transaccion();
 
         //Decodificando los mensajes de Tipo Ultimas Operaciones
@@ -139,10 +142,24 @@ public class TransacFrg extends Fragment {
             String[] lines = message.messageContent.split("\n");
 
             for (int i = 2; i< lines.length;i++) {
+
+                if (lines[i].contains("INFO:"))
+                    continue;
+
                 transaccion = new Transaccion();
                 String[] items = lines[i].split(";");
-                String[] date = items[0].trim().split("/");
-                transaccion.fecha = new Date(Integer.parseInt(date[2]),Integer.parseInt(date[1]),Integer.parseInt(date[0]));
+                String dateStr = items[0].trim();
+                /////////////////////////////////////////////////////////////////
+                SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = new Date();
+                try {
+                    date = fmt.parse(dateStr);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                /////////////////////////////////////////////////////////////////
+                transaccion.fecha = date;
+                /////////////////////////////////////////////////////////////////
                 transaccion.servicio = TIPO_SERVICIO.Identificar(items[1].trim());
                 transaccion.operacion = TIPO_TRANSACCION.Identificar(items[2].trim());
                 transaccion.monto = Double.parseDouble(items[3].trim());
