@@ -6,12 +6,21 @@ package cu.tko.kbnco_metro.logica;
 
 public enum TIPO_OPERACIONES {
     DEFAULT("Default","Operacion"),
-    CONSULTAR_SALDO("Banco Metropolitano:  La consulta de saldo","Consulta de saldo"),
-    FACTURA("Banco Metropolitano:  Factura: ","Factura"),
-    AUTENTICAR("Usted se ha autenticado en la plataforma","Autenticacion exitosa"),
-    REGISTRAR_SUCESS("Banco Metropolitano:  La operacion de registro fue completada","Registro exitoso"),
+    CONSULTAR_SALDO("Banco Metropolitano:  La consulta de saldo","Consulta de Saldo"),
+    CONSULTAR_SALDO_ERROR("Fallo la consulta de saldo","Consulta de Saldo Fallida"),
+    TRANSFERENCIA_TX_SALDO("Banco Metropolitano:  La Transferencia","Transferencia Enviada"),
+    TRANSFERENCIA_RX_SALDO("Se ha realizado una transferencia","Transferencia Recibida"),
+    ERROR_FACTURA("Consulta de Servicio Error, Banco Metropolitano: Factura inexistente","Consulta Factura Inexistente"),
+    FACTURA("Banco Metropolitano:  Factura: ","Consulta Factura"),
+    FACTURA_PAGADA("Banco Metropolitano:  El pago de la factura ","Factura Pagada"),
+    AUTENTICAR("Usted se ha autenticado en la plataforma","Autenticacion Exitosa"),
+    INFO_CODIGO_ACTIVACION("El c","Registro - Codigo Activación"),
+    REGISTRAR_SUCESS("Banco Metropolitano:  La operacion de registro fue completada","Registro Exitoso"),
     ERROR("Error ","Error"),
-    ULTIMAS_OPERACIONES("Banco Metropolitano Ultimas operaciones","Ultimas operaciones");
+    ERROR_AUTENTICACION("Error de autenticacion","Error de Autenticación"),
+    ERROR_SERVICIO_SIN_AUTENTICACION("Fallo la consulta de servicio. Para realizar esta operacion","Error de Consulta Factura"),
+    ERROR_ULTIMAS_OPERACIONES("Fallo la consulta de las ultimas operaciones","Consulta de Ultimas Operaciones Fallida"),
+    ULTIMAS_OPERACIONES("Banco Metropolitano Ultimas operaciones","Ultimas Operaciones");
 
     public String inicioMsg;
     public String title;
