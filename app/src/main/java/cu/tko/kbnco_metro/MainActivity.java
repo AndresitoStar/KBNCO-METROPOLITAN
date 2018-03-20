@@ -1,7 +1,15 @@
 package cu.tko.kbnco_metro;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -9,10 +17,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsMessage;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import cu.tko.kbnco_metro.fragments.HistorialFrg;
@@ -26,17 +37,15 @@ import static android.Manifest.permission.RECEIVE_SMS;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ActivityCompat.OnRequestPermissionsResultCallback,
-                    Home.HomeFragmentListener {
+        Home.HomeFragmentListener {
 
     private final int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private boolean isHome;
+    static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        chequearPermisos(READ_SMS);
-//        chequearPermisos(RECEIVE_SMS);
-//        chequearPermisos(CALL_PHONE);
         RequestMultiplePermission();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -51,7 +60,21 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onClick(View view) {
+                String USSD = "*444*40*03" + Uri.encode("#");
+                Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + USSD));
+                startActivity(callIntent);
+            }
+        });
+
         goHome();
+
+        IntentFilter filter = new IntentFilter(ACTION);
+        this.registerReceiver(SmsReceiver, filter);
     }
 
     private static final int INTERVALO = 2000; //2 segundos para salir
@@ -79,15 +102,46 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
+    private void showAlertAfterSms(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message.replaceAll("\n", "").replaceAll("\r", ""));
+        builder.setCancelable(true);
+        builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public final BroadcastReceiver SmsReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (ACTION.equals(action)) {
+                Bundle intentExtras = intent.getExtras();
+
+                if (intentExtras != null) {
+                    Object[] sms = (Object[]) intentExtras.get("pdus");
+                    StringBuilder sb = new StringBuilder();
+
+                    for (int i = 0; i < sms.length; ++i) {
+                        SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) sms[i]);
+                        String phone = smsMessage.getOriginatingAddress();
+                        if (phone != null && phone.equalsIgnoreCase("pagoxmovil")) {
+                            String message = smsMessage.getMessageBody().toString();
+                            sb.append(message);
+                            sb.append(" ");
+                        }
+                    }
+                    showAlertAfterSms(sb.toString());
+                }
+            }
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
