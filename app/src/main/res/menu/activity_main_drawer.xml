@@ -13,6 +13,10 @@
             android:id="@+id/menu_historial"
             android:icon="@android:drawable/ic_menu_recent_history"
             android:title="@string/historial" />
+        <item
+            android:id="@+id/menu_transacciones"
+            android:icon="@android:drawable/ic_menu_directions"
+            android:title="@string/transacciones" />
     </group>
 
 </menu>

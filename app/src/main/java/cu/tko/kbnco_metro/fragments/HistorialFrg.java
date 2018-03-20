@@ -19,11 +19,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import cu.tko.kbnco_metro.R;
+import cu.tko.kbnco_metro.logica.Sms;
+import cu.tko.kbnco_metro.logica.TIPO_MONEDA;
 import cu.tko.kbnco_metro.logica.TIPO_OPERACIONES;
+import cu.tko.kbnco_metro.logica.TIPO_SERVICIO;
+import cu.tko.kbnco_metro.logica.TIPO_TRANSACCION;
+import cu.tko.kbnco_metro.logica.Transaccion;
 
 
 /**
@@ -34,9 +40,11 @@ import cu.tko.kbnco_metro.logica.TIPO_OPERACIONES;
 public class HistorialFrg extends Fragment {
     private ListView historialListView;
     private HistorialAdapter adapter;
+    private List<Transaccion> transacciones;
 
     public HistorialFrg() {
         // Required empty public constructor
+        transacciones = new ArrayList<>();
     }
 
     /**
@@ -82,12 +90,6 @@ public class HistorialFrg extends Fragment {
         return view;
     }
 
-    private class Sms {
-        public String messageNumber;
-        public String messageContent;
-        public String fecha;
-    }
-
     public List<Sms> readSms() {
         ArrayList<Sms> smsInbox = new ArrayList<Sms>();
 
@@ -116,15 +118,15 @@ public class HistorialFrg extends Fragment {
                         Sms message = new Sms();
                         message.messageContent = cursor.getString(cursor.getColumnIndex("body"));
                         message.fecha = formatter.format(calendar.getTime());
+                        message.fecha_date = calendar.getTime();
+
                         smsInbox.add(message);
                     }
                 } while (cursor.moveToPrevious());
             }
             cursor.close();
         }
-
         return smsInbox;
-
     }
 
     /**
