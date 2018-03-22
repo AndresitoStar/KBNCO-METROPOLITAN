@@ -29,6 +29,7 @@ import android.widget.Toast;
 import cu.tko.kbnco_metro.fragments.HistorialFrg;
 import cu.tko.kbnco_metro.fragments.Home;
 import cu.tko.kbnco_metro.fragments.TransacFrg;
+import cu.tko.kbnco_metro.logica.Utils;
 
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.READ_SMS;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity
     private final int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private boolean isHome;
     static final String ACTION = "android.provider.Telephony.SMS_RECEIVED";
+    public Utils utils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        utils = new Utils();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
