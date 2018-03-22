@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import cu.tko.kbnco_metro.MainActivity;
 import cu.tko.kbnco_metro.R;
 import cu.tko.kbnco_metro.logica.Sms;
 import cu.tko.kbnco_metro.logica.TIPO_MONEDA;
@@ -40,11 +41,10 @@ import cu.tko.kbnco_metro.logica.Transaccion;
 public class HistorialFrg extends Fragment {
     private ListView historialListView;
     private HistorialAdapter adapter;
-    private List<Transaccion> transacciones;
+    List<Sms> lista;
 
     public HistorialFrg() {
         // Required empty public constructor
-        transacciones = new ArrayList<>();
     }
 
     /**
@@ -65,7 +65,7 @@ public class HistorialFrg extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        List<Sms> lista = readSms();
+         lista = ((MainActivity)getActivity()).utils.mensajes;
         adapter = new HistorialAdapter(getContext(), R.layout.historial_item, lista);
     }
 
@@ -81,52 +81,13 @@ public class HistorialFrg extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Detalles de la operacion");
-                String content = adapter.getLista().get(i).messageContent;
+                String content = lista.get(i).messageContent;
                 builder.setMessage(content);
                 builder.create().show();
             }
         });
 
         return view;
-    }
-
-    public List<Sms> readSms() {
-        ArrayList<Sms> smsInbox = new ArrayList<Sms>();
-
-        Uri uriSms = Uri.parse(("content://sms/inbox"));
-        Cursor cursor = getActivity().getContentResolver()
-                .query(uriSms, new String[]{"_id", "address", "date", "body",
-                                "type", "read"}, "type=1", null,
-                        "date" + " COLLATE LOCALIZED ASC");
-        if (cursor != null) {
-            cursor.moveToLast();
-            if (cursor.getCount() > 0) {
-                do {
-                    String address = cursor.getString(cursor.getColumnIndex("address"));
-                    if (address != null && address.equalsIgnoreCase("pagoxmovil")) {
-                        String date = cursor.getString(cursor.getColumnIndex("date"));
-                        Long timestamp = Long.parseLong(date);
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis(timestamp);
-                        DateFormat formatter = null;
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                            formatter = new SimpleDateFormat("d 'de' MMMM 'del' yyyy - h:mm:ss a", Locale.forLanguageTag("ES"));
-                        }
-                        else{
-                            formatter = new SimpleDateFormat("d 'de' MMMM 'del' yyyy - h:mm:ss a", Locale.US);
-                        }
-                        Sms message = new Sms();
-                        message.messageContent = cursor.getString(cursor.getColumnIndex("body"));
-                        message.fecha = formatter.format(calendar.getTime());
-                        message.fecha_date = calendar.getTime();
-
-                        smsInbox.add(message);
-                    }
-                } while (cursor.moveToPrevious());
-            }
-            cursor.close();
-        }
-        return smsInbox;
     }
 
     /**
@@ -151,7 +112,7 @@ public class HistorialFrg extends Fragment {
 
         @Override
         public int getCount() {
-            return getLista().size();
+            return lista.size();
         }
 
         @Override
@@ -174,10 +135,5 @@ public class HistorialFrg extends Fragment {
 
             return convertView;
         }
-
-        public List<Sms> getLista() {
-            return lista;
-        }
     }
-
 }
