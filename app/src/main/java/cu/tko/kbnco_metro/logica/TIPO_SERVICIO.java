@@ -5,11 +5,12 @@ package cu.tko.kbnco_metro.logica;
  */
 
 public enum TIPO_SERVICIO {
-    ATM("AY","ATM"),
+    ATM("AY","Cajero Automatico"),
     TELEFONO("TELF","TELEF","Telefono"),
     ELECTRICIDAD("ELEC","Electricidad"),
     TRANSFERENCIA("TRAN","Transferencia"),
     SALARIO("EV","Salario"),
+    INTERES("IO","Interes"),
     DEFAULT("DF","Default");
 
 

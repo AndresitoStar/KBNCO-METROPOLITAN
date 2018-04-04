@@ -65,7 +65,7 @@ public class HistorialFrg extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-         lista = ((MainActivity)getActivity()).utils.mensajes;
+        lista = ((MainActivity)getActivity()).utils.mensajes;
         adapter = new HistorialAdapter(getContext(), R.layout.historial_item, lista);
     }
 

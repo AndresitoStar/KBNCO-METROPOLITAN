@@ -127,10 +127,10 @@ public class TransacFrg extends Fragment {
 
             DateFormat formatter = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                formatter = new SimpleDateFormat("d 'de' MMMM 'del' yyyy - h:mm:ss a", Locale.forLanguageTag("ES"));
+                formatter = new SimpleDateFormat("d 'de' MMMM 'del' yyyy", Locale.forLanguageTag("ES"));
             }
             else{
-                formatter = new SimpleDateFormat("d 'de' MMMM 'del' yyyy - h:mm:ss a", Locale.US);
+                formatter = new SimpleDateFormat("d 'de' MMMM 'del' yyyy", Locale.US);
             }
 
             String tipoHistorial = transacciones.get(position).operacion.toString()+" "+transacciones.get(position).monto.toString();
