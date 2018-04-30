@@ -1,12 +1,14 @@
 package cu.tko.kbnco_metro.logica;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
  * Created by aleguerra05 on 3/16/2018.
  */
 
-public class Transaccion{
+public class Transaccion implements Comparable<Transaccion>{
     public Date fecha;
     public TIPO_SERVICIO servicio;
     public TIPO_TRANSACCION operacion;
@@ -26,5 +28,10 @@ public class Transaccion{
     public String toString()
     {
         return this.noTransaccion;
+    }
+
+    @Override
+    public int compareTo(@NonNull Transaccion transaccion) {
+        return fecha.compareTo(transaccion.fecha);
     }
 }

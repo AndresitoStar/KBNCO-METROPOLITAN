@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import cu.tko.kbnco_metro.MainActivity;
 import cu.tko.kbnco_metro.R;
+import cu.tko.kbnco_metro.logica.Saldo;
 import cu.tko.kbnco_metro.logica.Sms;
 import cu.tko.kbnco_metro.logica.TIPO_MONEDA;
 import cu.tko.kbnco_metro.logica.TIPO_OPERACIONES;
@@ -44,8 +45,10 @@ import static java.lang.Long.*;
  */
 public class TransacFrg extends Fragment {
     private ListView historialListView;
+    private TextView saldoText;
     private HistorialAdapter adapter;
     private List<Transaccion> transacciones;
+    private List<Saldo> saldos;
 
     public TransacFrg() {
         // Required empty public constructor
@@ -72,6 +75,8 @@ public class TransacFrg extends Fragment {
         super.onCreate(savedInstanceState);
         adapter = new HistorialAdapter(getContext(), R.layout.transac_item, transacciones);
         transacciones = ((MainActivity)getActivity()).utils.transacciones;
+        saldos = ((MainActivity)getActivity()).utils.saldos;
+
     }
 
     @Override
@@ -79,6 +84,11 @@ public class TransacFrg extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_historial, container, false);
+
+//        saldoText = view.findViewById(R.id.saldo_txt);
+//
+//        saldoText.setText(saldos.get(saldos.size() - 1).monto.toString());
+
         historialListView = view.findViewById(R.id.historial_list);
         historialListView.setAdapter(adapter);
         historialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,6 +97,7 @@ public class TransacFrg extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Detalles de la operacion");
                 String content = adapter.getLista().get(i).monto.toString()+" "+adapter.getLista().get(i).moneda.toString();
+//                String content = adapter.getSaldos().get(i).monto.toString()+" "+adapter.getSaldos().get(i).moneda.toString();
                 builder.setMessage(content);
                 builder.create().show();
             }
@@ -116,6 +127,7 @@ public class TransacFrg extends Fragment {
         @Override
         public int getCount() {
             return getLista().size();
+            //return getSaldos().size();
         }
 
         @Override
@@ -150,6 +162,10 @@ public class TransacFrg extends Fragment {
         public List<Transaccion> getLista() {
             return transacciones;
         }
+
+//        public List<Saldo> getSaldos() {
+//            return saldos;
+//        }
     }
 
 }

@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/KBNCO-METROPOLITAN.iml" filepath="$PROJECT_DIR$/KBNCO-METROPOLITAN.iml" />
-      <module fileurl="file://E:\Develop\KBNCO-METROPOLITAN\KBNCO-METROPOLITAN.iml" filepath="E:\Develop\KBNCO-METROPOLITAN\KBNCO-METROPOLITAN.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://E:\Develop\KBNCO-METROPOLITAN\app\app.iml" filepath="E:\Develop\KBNCO-METROPOLITAN\app\app.iml" />
     </modules>
   </component>
 </project>

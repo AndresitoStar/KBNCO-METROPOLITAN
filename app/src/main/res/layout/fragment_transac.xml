@@ -1,18 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cu.tko.kbnco_metro.fragments.TransacFrg">
+    tools:context="cu.tko.kbnco_metro.fragments.TransacFrg"
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
 
     <ListView
         android:id="@+id/transac_list"
         style="@style/Widget.AppCompat.ListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:listSelector="@android:drawable/list_selector_background"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        tools:listitem="@layout/transac_item" />
-</RelativeLayout>
+        tools:listitem="@layout/transac_item"
+        android:paddingTop="10px"/>
+
+    <TextView
+        android:id="@+id/saldo_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12345"
+        android:paddingTop="10px"/>
+
+
+
+</LinearLayout>
