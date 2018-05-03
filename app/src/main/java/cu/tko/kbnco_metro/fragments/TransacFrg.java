@@ -83,13 +83,13 @@ public class TransacFrg extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_historial, container, false);
+        View view = inflater.inflate(R.layout.fragment_transac, container, false);
 
-//        saldoText = view.findViewById(R.id.saldo_txt);
-//
-//        saldoText.setText(saldos.get(saldos.size() - 1).monto.toString());
+        saldoText = view.findViewById(R.id.saldo_txt);
 
-        historialListView = view.findViewById(R.id.historial_list);
+        saldoText.setText(saldos.get(saldos.size() - 1).monto.toString());
+
+        historialListView = view.findViewById(R.id.transac_list);
         historialListView.setAdapter(adapter);
         historialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
