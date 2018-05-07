@@ -32,6 +32,7 @@
         <!--</android.support.v7.widget.Toolbar>-->
 
         <LinearLayout
+            android:id="@+id/elementLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary">
@@ -40,7 +41,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-
                 android:text="Tipo de historial"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -54,6 +54,13 @@
             android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="10dp"
             android:text="Fecha" />
+        <TextView
+            android:id="@+id/hist_saldo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:text="Saldo" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView><!--</LinearLayout>-->

@@ -15,6 +15,7 @@ public class Transaccion implements Comparable<Transaccion>{
     public Double monto;
     public TIPO_MONEDA moneda;
     public String noTransaccion;
+    public Double saldo = 0.0;
 
     @Override
     public boolean equals(Object obj) {

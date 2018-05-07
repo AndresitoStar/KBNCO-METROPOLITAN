@@ -5,4 +5,6 @@
     <color name="colorPrimary">#26a69a</color>
     <color name="colorPrimaryDark">#008a7c</color>
     <color name="colorAccent">#ffffff</color>
+    <color name="creditColor">#26a66c</color>
+    <color name="debitColor">#a62659</color>
 </resources>
