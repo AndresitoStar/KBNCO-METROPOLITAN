@@ -90,7 +90,7 @@ public class TransacFrg extends Fragment {
 
         saldoText = view.findViewById(R.id.saldo_txt);
 
-        saldoText.setText(saldos.get(0).monto.toString());
+        saldoText.setText(transacciones.get(0).saldo.toString() +" "+ transacciones.get(0).moneda);
 
         historialListView = view.findViewById(R.id.transac_list);
         historialListView.setAdapter(adapter);
@@ -165,9 +165,12 @@ public class TransacFrg extends Fragment {
             //Cambiando color
             LinearLayout elelemtLoyout = (LinearLayout) convertView.findViewById(R.id.elementLayout);
             if (transacciones.get(position).operacion == TIPO_TRANSACCION.CREDITO)
-                elelemtLoyout.setBackgroundColor(Color.BLUE);
+                elelemtLoyout.setBackgroundColor(getResources().getColor(R.color.creditColor));
             else
-                elelemtLoyout.setBackgroundColor(Color.RED);
+                elelemtLoyout.setBackgroundColor(getResources().getColor(R.color.debitColor));
+
+
+
             return convertView;
         }
 

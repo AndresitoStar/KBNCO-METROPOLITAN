@@ -145,7 +145,7 @@ public class Utils {
             transaccion = new Transaccion();
             transaccion.fecha = message.fecha_date;
             transaccion.servicio = TIPO_SERVICIO.Identificar(lines[0]);
-            transaccion.operacion = TIPO_TRANSACCION.Identificar(lines[4]);
+            transaccion.operacion = TIPO_TRANSACCION.DEBITO; //TIPO_TRANSACCION.Identificar(lines[4]);
             transaccion.monto = Double.parseDouble(lines[2].trim().split(" ")[2].trim());
             transaccion.moneda = TIPO_MONEDA.Identificar(lines[2].trim().split(" ")[3].trim());
             transaccion.noTransaccion = lines[3].trim().split(" ")[2].trim();
@@ -161,7 +161,7 @@ public class Utils {
 
             transaccion = new Transaccion();
             transaccion.fecha = message.fecha_date;
-            transaccion.servicio = TIPO_SERVICIO.Identificar(lines[0]);
+            transaccion.servicio = TIPO_SERVICIO.TRANSFERENCIA;//TIPO_SERVICIO.Identificar(lines[0]);
             transaccion.operacion = TIPO_TRANSACCION.CREDITO;
             transaccion.monto = Double.parseDouble(lines[0].trim().split(" ")[10].trim());
             transaccion.moneda = TIPO_MONEDA.Identificar(lines[0].trim().split(" ")[11].trim());
@@ -176,7 +176,7 @@ public class Utils {
 
             transaccion = new Transaccion();
             transaccion.fecha = message.fecha_date;
-            transaccion.servicio = TIPO_SERVICIO.Identificar(lines[0]);
+            transaccion.servicio = TIPO_SERVICIO.TRANSFERENCIA;//TIPO_SERVICIO.Identificar(lines[0]);
             transaccion.operacion = TIPO_TRANSACCION.DEBITO;
             transaccion.monto = Double.parseDouble(lines[3].trim().split(" ")[1].trim());
             transaccion.moneda = TIPO_MONEDA.Identificar(lines[3].trim().split(" ")[2].trim());
